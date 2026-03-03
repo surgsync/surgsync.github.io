@@ -785,10 +785,11 @@
       <h3 class="title is-4 toolbox-subsection-title has-text-centered">
         <span class="icon toolbox-icon"><i class="fas fa-tags"></i></span>
         Annotation GUI
+        <span class="speed-badge">4× speed</span>
       </h3>
       <p class="toolbox-subsection-desc has-text-centered">
         A custom PyQt-based annotation tool for labeling tool-tissue contact detection
-        and event/phase descriptions during frame-by-frame playback of synchronized recordings.
+        and task descriptions during frame-by-frame playback of synchronized recordings.
       </p>
       <div class="columns is-vcentered toolbox-columns">
 
@@ -798,7 +799,7 @@
           <figure class="toolbox-video-figure">
             <!-- TODO: Save the GUI screenshot as static/images/toolbox/annotation_gui.png -->
             <img src="./static/images/toolbox/annotation_gui.png"
-                 alt="Data annotation GUI built with PyQt for contact detection and phase labeling"
+                 alt="Data annotation GUI built with PyQt for contact detection and task description labeling"
                  style="border-radius: 8px; width: 100%;"
                  onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:220px\'><p style=\'font-size:1.5rem\'>🖥️</p><p><strong>Annotation GUI Screenshot</strong></p><p style=\'font-size:0.8rem;color:#888\'>Save as: <code>static/images/toolbox/annotation_gui.png</code></p></div>'">
             <figcaption>Annotation GUI</figcaption>
@@ -813,11 +814,12 @@
                </video> -->
         <div class="column is-half">
           <p class="toolbox-col-label">Demo</p>
-          <div class="placeholder-figure" style="min-height: 220px;">
-            <p style="font-size: 1.6rem; margin-bottom: 0.4rem;">🎥</p>
-            <p style="font-weight: 600; margin-bottom: 0.2rem;">Annotation Demo</p>
-            <p style="font-size: 0.78rem; color: #aaa; margin-top: 0.3rem;">Coming soon</p>
-          </div>
+          <figure class="toolbox-video-figure">
+            <video autoplay controls loop muted playsinline class="toolbox-video">
+              <source src="./static/videos/toolbox/annotation_demo.mp4" type="video/mp4">
+            </video>
+            <figcaption>Quick Demo on how to use the Annotation GUI</figcaption>
+          </figure>
         </div>
 
       </div>
