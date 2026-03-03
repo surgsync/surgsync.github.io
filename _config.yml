@@ -1,0 +1,15 @@
+# Jekyll configuration for SurgSync website
+title: "SurgSync"
+description: "Time-Synchronized Multi-modal Data Collection Framework and Dataset for Surgical Robotics"
+url: "https://surgsync.github.io"
+
+# Tell Jekyll not to process these directories as Jekyll content —
+# they are plain static files that should be served as-is.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - CLAUDE.md
+  - HOW_TO_EDIT.md
+  - HOW_TO_RUN.md
+  - "*.pdf"
+  - ".idea"

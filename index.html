@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="SurgSync: Time-Synchronized Multi-modal Data Collection Framework and Dataset for Surgical Robotics. ICRA 2026.">
+  <meta name="keywords" content="SurgSync, surgical robotics, dVRK, data collection, ICRA 2026, time synchronization, multi-modal dataset">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SurgSync: Time-Synchronized Multi-modal Data Collection</title>
+
+  <!-- ================================================================
+       GOOGLE ANALYTICS
+       To enable tracking:
+         1. Set GA_ENABLED to true below.
+         2. Replace G-XXXXXXXXXX with your actual Measurement ID.
+            Find it in: Google Analytics → Admin → Data Streams → Web stream.
+       ================================================================ -->
+  <script>
+    var GA_ENABLED       = false;          // ← set to true to enable tracking
+    var GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // ← replace with your real ID
+
+    if (GA_ENABLED) {
+      /* Dynamically inject the GA4 loader script */
+      var _gas = document.createElement('script');
+      _gas.async = true;
+      _gas.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+      document.head.appendChild(_gas);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', GA_MEASUREMENT_ID);
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- Bulma CSS Framework + extensions -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+
+  <!-- FontAwesome icons (fas, fab, far)
+       Rendered via the JS file below (inline SVG) — no local webfonts needed.
+       The CSS version is intentionally omitted to avoid 404s on missing webfont files. -->
+
+  <!-- Academic Icons (ai ai-arxiv, etc.) -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <!-- Site-specific styles -->
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="./static/images/favicon_jhu.svg" type="image/svg+xml">
+
+  <!-- jQuery (required by bulma-carousel) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- JS: FontAwesome, Bulma extensions, site logic -->
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<!-- ================================================================
+     NAVIGATION BAR
+     Links jump to major sections on the page.
+     ================================================================ -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <!-- Hamburger button for mobile — toggled by index.js -->
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="#abstract">Abstract</a>
+      <a class="navbar-item" href="#dataset">Dataset</a>
+      <a class="navbar-item" href="#toolbox">Toolbox</a>
+      <a class="navbar-item" href="#contributions">Contributions</a>
+      <a class="navbar-item" href="#results">Results</a>
+      <a class="navbar-item" href="#BibTeX">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================================================================
+     HERO — Title, Affiliations, and Link Badges
+     Author names appear in the dedicated Authors section below.
+     ================================================================ -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-fullhd">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+
+          <!-- Paper Title -->
+          <h1 class="title is-1 publication-title">
+            SurgSync: Time-Synchronized Multi-Modal Data Collection Framework
+            and Dataset for Surgical Robotics
+          </h1>
+
+          <!-- Compact affiliation line in the hero -->
+          <div class="is-size-6" style="color: #666; margin-bottom: 1rem; font-family: 'Google Sans', sans-serif;">
+            <sup>1</sup>Worcester Polytechnic Institute &nbsp;&nbsp;
+            <sup>2</sup>Johns Hopkins University &nbsp;&nbsp;
+            <sup>3</sup>University of British Columbia &nbsp;&nbsp;
+            <sup>4</sup>Politecnico di Milano
+          </div>
+
+          <!-- ---- Link Badges ----
+               Layout: two rows
+                 Row 1: Paper  |  arXiv  |  Dataset
+                 Row 2: Code-Toolbox  |  Code-Framework
+               To activate a link when it becomes available:
+                 1. Remove the "coming-soon-link" class from the outer <span>
+                 2. Set a real href="..." on the inner <a>
+                 3. Add class="external-link" back to the <a>
+                 4. Remove the <span class="coming-soon-badge">...</span> inside it
+          -->
+          <div class="column has-text-centered" style="margin-top: 0.5rem;">
+            <div class="publication-links">
+
+              <!-- ROW 1: Paper · arXiv · Dataset -->
+
+              <!-- Paper PDF — Coming Soon -->
+              <span class="link-block coming-soon-link">
+                <a class="button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                  <span class="coming-soon-badge">(Coming Soon)</span>
+                </a>
+              </span>
+
+              <!-- arXiv — Coming Soon -->
+              <span class="link-block coming-soon-link">
+                <a class="button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                  <span class="coming-soon-badge">(Coming Soon)</span>
+                </a>
+              </span>
+
+              <!-- Dataset — Coming Soon -->
+              <span class="link-block coming-soon-link">
+                <a class="button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="far fa-images"></i></span>
+                  <span>Dataset</span>
+                  <span class="coming-soon-badge">(Coming Soon)</span>
+                </a>
+              </span>
+
+              <!-- Line break between the two badge rows -->
+              <div class="badge-row-break"></div>
+
+              <!-- ROW 2: Code-Toolbox · Code-Framework -->
+
+              <!-- Post-Collection Processing Toolbox Code — Coming Soon -->
+              <span class="link-block coming-soon-link">
+                <a class="button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code-Toolbox</span>
+                  <span class="coming-soon-badge">(Coming Soon)</span>
+                </a>
+              </span>
+
+              <!-- Framework Code — Coming Soon -->
+              <span class="link-block coming-soon-link">
+                <a class="button is-normal is-rounded is-dark" disabled>
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code-Framework</span>
+                  <span class="coming-soon-badge">(Coming Soon)</span>
+                </a>
+              </span>
+
+            </div>
+          </div>
+          <!-- /publication-links -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     TEASER — Overview Figure + subtitle
+     Replace static/images/overview.png with Fig. 1 from the paper.
+     ================================================================ -->
+<section class="hero teaser">
+  <div class="container is-max-fullhd">
+    <div class="hero-body">
+
+      <figure class="image">
+        <img src="./static/images/overview.png"
+             alt="SurgSync overview diagram: framework, dataset, and post-processing toolbox"
+             onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:380px\'><p style=\'font-size:1.5rem\'>📷</p><p><strong>Overview Figure (Fig. 1)</strong></p><p style=\'font-size:0.9rem;color:#888\'>Save as: <code>static/images/overview.png</code></p></div>'">
+      </figure>
+
+      <h2 class="subtitle has-text-centered" style="margin-top: 1.25rem;">
+        <span class="surgsync">SurgSync</span> is a time-synchronized multi-modal data
+        collection framework for surgical robotics, featuring dual-mode recorders,
+        a modern stereo endoscope, capacitive contact sensing, and a post-collection
+        processing toolbox — validated on 214 user-study instances across four surgical tasks.
+      </h2>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     AUTHORS — Profile photos, names, and affiliations
+     Photos: save each image to static/images/authors/<firstname_lastname>.jpg
+     If a photo file is missing, a colored circle with initials is shown.
+     ================================================================ -->
+<section class="section section-alt" id="authors">
+  <div class="container is-max-fullhd">
+    <h2 class="title is-3 has-text-centered">Authors</h2>
+
+    <!-- Row 1: Authors 1–4 -->
+    <div class="author-row">
+
+      <!-- Author 1: Haoying Zhou — WPI + JHU -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/haoying_zhou.jpg"
+             alt="Haoying Zhou"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <!-- Fallback square tile with initials, shown via onerror above -->
+        <div class="author-initials" style="display:none; background: #1565c0;">HZ</div>
+        <p class="author-name">
+          <a href="https://jackzhy96.github.io/" target="_blank" rel="noopener noreferrer">Haoying Zhou</a>
+        </p>
+        <p class="author-affiliation"><sup>1,2</sup> WPI / JHU</p>
+      </div>
+
+      <!-- Author 2: Chang Liu — JHU -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/chang_liu.jpg"
+             alt="Chang Liu"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #00796b;">CL</div>
+        <p class="author-name">
+          <a href="https://www.linkedin.com/in/chang-liu-9b7229295/" target="_blank" rel="noopener noreferrer">Chang Liu</a>
+        </p>
+        <p class="author-affiliation"><sup>2</sup> JHU</p>
+      </div>
+
+      <!-- Author 3: Yimeng Wu — JHU -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/yimeng_wu.jpg"
+             alt="Yimeng Wu"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #6a1b9a;">YW</div>
+        <p class="author-name">
+          <a href="https://www.linkedin.com/in/yimeng-yvonne-wu/" target="_blank" rel="noopener noreferrer">Yimeng Wu</a>
+        </p>
+        <p class="author-affiliation"><sup>2</sup> JHU</p>
+      </div>
+
+      <!-- Author 4: Junlin Wu — JHU -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/junlin_wu.jpg"
+             alt="Junlin Wu"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #e65100;">JW</div>
+        <p class="author-name">
+          <a href="https://kevinwuworld.com/" target="_blank" rel="noopener noreferrer">Junlin Wu</a>
+        </p>
+        <p class="author-affiliation"><sup>2</sup> JHU</p>
+      </div>
+
+    </div>
+    <!-- /Row 1 -->
+
+    <!-- Row 2: Authors 5–7 -->
+    <div class="author-row">
+
+      <!-- Author 5: Zijian Wu — UBC -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/zijian_wu.jpg"
+             alt="Zijian Wu"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #c62828;">ZW</div>
+        <p class="author-name">
+          <a href="https://scholar.google.com/citations?user=yx_dz7oAAAAJ" target="_blank" rel="noopener noreferrer">Zijian Wu</a>
+        </p>
+        <p class="author-affiliation"><sup>3</sup> UBC</p>
+      </div>
+
+      <!-- Author 6: Yu Chung Lee — UBC -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/paul_lee.jpg"
+             alt="Paul Lee"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #2e7d32;">YL</div>
+        <p class="author-name">
+          <a href="https://scholar.google.com/citations?user=cqNYVL4AAAAJ" target="_blank" rel="noopener noreferrer">Yu Chung Lee</a>
+        </p>
+        <p class="author-affiliation"><sup>3</sup> UBC</p>
+      </div>
+
+      <!-- Author 7: Sara Martuscelli — Politecnico di Milano -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/sara_martuscelli.jpg"
+             alt="Sara Martuscelli"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #ad1457;">SM</div>
+        <p class="author-name">
+          <a href="https://www.linkedin.com/in/sara-martuscelli-2b0151352/" target="_blank" rel="noopener noreferrer">Sara Martuscelli</a>
+        </p>
+        <p class="author-affiliation"><sup>4</sup> Polimi</p>
+      </div>
+
+    </div>
+    <!-- /Row 2 -->
+
+    <!-- Row 3: Authors 8–10 -->
+    <div class="author-row">
+
+      <!-- Author 8: Septimiu E. Salcudean — UBC -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/salcudean.jpg"
+             alt="Septimiu E. Salcudean"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #283593;">SS</div>
+        <p class="author-name">
+          <a href="https://scholar.google.com/citations?user=kpp_A9wAAAAJ" target="_blank" rel="noopener noreferrer">Septimiu E. Salcudean</a>
+        </p>
+        <p class="author-affiliation"><sup>3</sup> UBC</p>
+      </div>
+
+      <!-- Author 9: Gregory S. Fischer — WPI -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/gregory_fischer.jpg"
+             alt="Gregory S. Fischer"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #4e342e;">GF</div>
+        <p class="author-name">
+          <a href="https://scholar.google.com/citations?user=N00MU6AAAAAJ" target="_blank" rel="noopener noreferrer">Gregory S. Fischer</a>
+        </p>
+        <p class="author-affiliation"><sup>1</sup> WPI</p>
+      </div>
+
+      <!-- Author 10: Peter Kazanzides — JHU -->
+      <div class="author-profile">
+        <img class="author-photo"
+             src="./static/images/authors/peter_kazanzides.jpg"
+             alt="Peter Kazanzides"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="author-initials" style="display:none; background: #01579b;">PK</div>
+        <p class="author-name">
+          <a href="https://scholar.google.com/citations?user=nNU3STcAAAAJ" target="_blank" rel="noopener noreferrer">Peter Kazanzides</a>
+        </p>
+        <p class="author-affiliation"><sup>2</sup> JHU</p>
+      </div>
+
+    </div>
+    <!-- /Row 3 -->
+
+    <!-- Affiliation legend -->
+    <p class="has-text-centered" style="font-size: 0.85rem; color: #777; margin-top: 1.5rem;">
+      <sup>1</sup> Worcester Polytechnic Institute &nbsp;&nbsp;
+      <sup>2</sup> Johns Hopkins University &nbsp;&nbsp;
+      <sup>3</sup> University of British Columbia &nbsp;&nbsp;
+      <sup>4</sup> Politecnico di Milano
+    </p>
+
+    <!-- Contact emails — replace with real addresses -->
+    <p class="has-text-centered" style="font-size: 0.85rem; color: #666; margin-top: 0.75rem;">
+      <i class="fas fa-envelope" style="color: #aaa; margin-right: 0.35em;"></i>
+      Correspondence:
+      <a href="mailto:hzhou6@wpi.edu" style="color: hsl(204,86%,53%);">hzhou6@wpi.edu</a>
+      &nbsp;&nbsp;·&nbsp;&nbsp;
+      <a href="mailto:pkaz@jhu.edu" style="color: hsl(204,86%,53%);">pkaz@jhu.edu</a>
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     ABSTRACT
+     ================================================================ -->
+<section class="section" id="abstract">
+  <div class="container is-max-fullhd">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Most existing robotic surgery systems adopt a human-in-the-loop paradigm, often with
+            the surgeon directly teleoperating the robotic system. Adding intelligence to these
+            robots would enable higher-level control, such as supervised autonomy or even full
+            autonomy. However, artificial intelligence (AI) requires large amounts of training
+            data, which is currently lacking.
+          </p>
+          <p>
+            This work proposes <span class="surgsync">SurgSync</span>, a multi-modal data
+            collection framework with offline and online synchronization to support both training
+            and real-time inference, respectively. The framework is implemented on a da Vinci
+            Research Kit (dVRK) and introduces (1) dual-mode (online/offline-matching)
+            synchronized recorders, (2) a modern stereo endoscope to achieve image quality on
+            par with clinical systems, and (3) additional sensors such as a side-view camera
+            and a novel capacitive contact sensor to provide ground truth contact data.
+          </p>
+          <p>
+            The framework also incorporates a post-processing toolbox for tasks such as depth
+            estimation, optical flow, and a practical kinematic reprojection method using
+            Gaussian heatmap. User studies with participants of varying skill level are performed
+            with ex-vivo tissue to provide clinically realistic data, and a network for surgical
+            skill assessment is employed to demonstrate utilization of the collected data.
+            Through the user study experiments, we obtained a dataset of
+            <strong>214 validated instances</strong> across multiple canonical training tasks.
+            All software and data will be made available to the research community.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     VIDEO — Coming Soon
+     Replace this section with an actual YouTube embed when available.
+     Use the .publication-video class to get a responsive 16:9 iframe.
+     Example:
+       <div class="publication-video">
+         <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0&showinfo=0"
+                 frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+       </div>
+     ================================================================ -->
+<section class="section" id="video">
+  <div class="container is-max-fullhd">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+
+        <!-- Video coming-soon placeholder.
+             To replace: remove this div and add the YouTube iframe above. -->
+        <div class="coming-soon-notice" style="padding: 4rem 2rem;">
+          <p class="coming-soon-icon"><i class="fab fa-youtube fa-3x" style="color: #e0e0e0;"></i></p>
+          <p class="title is-5" style="color: #888; margin-top: 1rem;">Video Coming Soon</p>
+          <p class="content" style="color: #aaa; font-size: 0.9rem;">
+            A demo and explainer video will be posted here upon paper publication.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     DATASET — Description (left) + distribution table (right)
+     ================================================================ -->
+<section class="section section-alt" id="dataset">
+  <div class="container is-max-fullhd">
+    <h2 class="title is-3 has-text-centered">Dataset</h2>
+
+    <div class="columns is-vcentered">
+
+      <!-- Left column: description -->
+      <div class="column is-half">
+        <div class="content">
+          <h3 class="title is-4">User Study &amp; Data Collection</h3>
+          <p>
+            We conduct a user study with <strong>13 human subjects</strong> (3 female, 10 male)
+            spanning three skill levels — Novice (N), Experienced (E), and Professional (P).
+            Tasks are performed on phantoms and ex-vivo tissues for clinical realism.
+          </p>
+          <p>
+            The resulting dataset comprises <strong>214 validated instances</strong> across
+            four canonical surgical training tasks. Each instance provides time-aligned:
+          </p>
+          <ul>
+            <li>Stereo endoscope images (1080p, 60 Hz)</li>
+            <li>Side-view camera images (1080p, 30 Hz)</li>
+            <li>ECM &amp; PSM kinematic data (6D Cartesian + gripper)</li>
+            <li>Tool-tissue contact ground truth (binary)</li>
+            <li>Timestamps across all modalities</li>
+          </ul>
+          <p>
+            All modalities are frame-aligned by our synchronized recorders, enabling direct
+            multi-modal model training without additional interpolation. <strong> (the recording
+            frequency can be found in the Results section) </strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Right column: dataset distribution table
+           Columns are split by recorder mode (Online vs Offline) and skill level.
+           Online  = recorded with the online-matching recorder (real-time synced).
+           Offline = recorded with the offline-matching recorder (post-hoc time-matched).
+           "—" indicates that mode was not used for that task/skill-level combination.
+      -->
+      <div class="column is-half">
+        <h3 class="title is-5 has-text-centered">Dataset Distribution</h3>
+
+        <!-- Scrollable wrapper for smaller screens -->
+        <div style="overflow-x: auto;">
+          <table class="table is-bordered is-hoverable is-fullwidth has-text-centered dataset-table">
+            <thead>
+              <!-- Row 1: task column + grouped skill-level columns + total -->
+              <tr>
+                <th rowspan="2" class="dataset-th-task">Training Task</th>
+                <th colspan="2" class="dataset-th-novice">Novice (N)</th>
+                <th colspan="2" class="dataset-th-experienced">Experienced (E)</th>
+                <th colspan="2" class="dataset-th-professional">Professional (P)</th>
+                <th rowspan="2" class="dataset-th-total">Total</th>
+              </tr>
+              <!-- Row 2: Online / Offline sub-headers for each skill level -->
+              <tr>
+                <th class="dataset-th-online">Online</th>
+                <th class="dataset-th-offline">Offline</th>
+                <th class="dataset-th-online">Online</th>
+                <th class="dataset-th-offline">Offline</th>
+                <th class="dataset-th-online">Online</th>
+                <th class="dataset-th-offline">Offline</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="has-text-left"><strong>Suturing &amp; Knot Tying</strong></td>
+                <td class="dataset-online">13</td>
+                <td class="dataset-offline">2</td>
+                <td class="dataset-online">36</td>
+                <td class="dataset-offline">12</td>
+                <td class="dataset-online">2</td>
+                <td class="dataset-offline">39</td>
+                <td><strong>104</strong></td>
+              </tr>
+              <tr>
+                <td class="has-text-left"><strong>Peg Transfer</strong></td>
+                <td class="dataset-online">7</td>
+                <td class="dataset-offline">—</td>
+                <td class="dataset-online">11</td>
+                <td class="dataset-offline">—</td>
+                <td class="dataset-online">—</td>
+                <td class="dataset-offline">—</td>
+                <td><strong>18</strong></td>
+              </tr>
+              <tr>
+                <td class="has-text-left"><strong>Tissue Manipulation</strong></td>
+                <td class="dataset-online">9</td>
+                <td class="dataset-offline">—</td>
+                <td class="dataset-online">12</td>
+                <td class="dataset-offline">—</td>
+                <td class="dataset-online">—</td>
+                <td class="dataset-offline">—</td>
+                <td><strong>21</strong></td>
+              </tr>
+              <tr>
+                <td class="has-text-left"><strong>Dissection</strong></td>
+                <td class="dataset-online">6</td>
+                <td class="dataset-offline">—</td>
+                <td class="dataset-online">15</td>
+                <td class="dataset-offline">9</td>
+                <td class="dataset-online">1</td>
+                <td class="dataset-offline">40</td>
+                <td><strong>71</strong></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="dataset-total-row">
+                <td class="has-text-left"><strong>Total</strong></td>
+                <td class="dataset-online"><strong>35</strong></td>
+                <td class="dataset-offline"><strong>2</strong></td>
+                <td class="dataset-online"><strong>74</strong></td>
+                <td class="dataset-offline"><strong>21</strong></td>
+                <td class="dataset-online"><strong>3</strong></td>
+                <td class="dataset-offline"><strong>79</strong></td>
+                <td><strong>214</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Color legend for Online / Offline -->
+        <div class="dataset-legend">
+          <span class="legend-online">■ Online</span>
+          <span class="legend-offline">■ Offline</span>
+          <span class="legend-note">— = not collected</span>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /columns -->
+  </div>
+</section>
+
+
+<!-- ================================================================
+     POST-COLLECTION PROCESSING TOOLBOX
+     Four subsections, each with a two-column video layout:
+       Left  — original / source video or GUI screenshot
+       Right — processed output video(s)
+
+     VIDEO FILE PATHS (save your videos here to display them):
+       Kinematic reprojection:
+         static/videos/toolbox/kinematic_original.mp4   (left)
+         static/videos/toolbox/kinematic_psm1.mp4       (right-top, PSM1)
+         static/videos/toolbox/kinematic_psm2.mp4       (right-bottom, PSM2)
+       Depth estimation:
+         static/videos/toolbox/depth_original.mp4       (left)
+         static/videos/toolbox/depth_disparity.mp4      (right)
+       Optical flow:
+         static/videos/toolbox/flow_original.mp4        (left)
+         static/videos/toolbox/flow_output.mp4          (right)
+       Annotation GUI:
+         static/images/toolbox/annotation_gui.png       (left, static screenshot)
+         static/videos/toolbox/annotation_demo.mp4      (right)
+     ================================================================ -->
+<section class="section" id="toolbox">
+  <div class="container is-max-fullhd">
+    <h2 class="title is-3 has-text-centered">Post-Collection Processing Toolbox</h2>
+
+    <div class="columns is-centered has-text-centered" style="margin-bottom: 2rem;">
+      <div class="column is-four-fifths">
+        <p class="content">
+          Beyond data acquisition, we provide a configurable and extensible post-collection
+          processing toolbox that standardizes calibration and data processing — covering stereo
+          rectification, kinematic reprojection, depth estimation, optical flow, and data annotation.
+        </p>
+      </div>
+    </div>
+
+    <!-- ---- Subsection 1: Kinematic Reprojection ---- -->
+    <div class="toolbox-subsection">
+      <h3 class="title is-4 toolbox-subsection-title has-text-centered">
+        <span class="icon toolbox-icon"><i class="fas fa-crosshairs"></i></span>
+        Kinematic Reprojection
+        <span class="speed-badge">4× speed</span>
+      </h3>
+      <p class="toolbox-subsection-desc has-text-centered">
+        Projects 3D PSM tool-yaw link positions into the endoscope image plane using
+        hand-eye calibration and Gaussian heatmap rendering, providing per-frame
+        kinematic ground truth for both PSM1 and PSM2.
+      </p>
+      <div class="columns is-vcentered toolbox-columns">
+
+        <!-- Left: original endoscope video -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Original Endoscope Video</p>
+          <figure class="toolbox-video-figure">
+            <video autoplay controls loop muted playsinline class="toolbox-video">
+              <source src="./static/videos/toolbox/kinematic_original.mp4" type="video/mp4">
+            </video>
+            <!-- Figcaption is used by the JS error handler to label the placeholder -->
+            <figcaption>Original Endoscope Video</figcaption>
+          </figure>
+        </div>
+
+        <!-- Right: PSM1 (top) and PSM2 (bottom) kinematic reprojection videos -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Kinematic Reprojection</p>
+          <div class="stacked-videos">
+            <figure class="toolbox-video-figure">
+              <video autoplay controls loop muted playsinline class="toolbox-video">
+                <source src="./static/videos/toolbox/kinematic_psm1.mp4" type="video/mp4">
+              </video>
+              <figcaption>PSM1 Kinematic Reprojection</figcaption>
+            </figure>
+            <figure class="toolbox-video-figure">
+              <video autoplay controls loop muted playsinline class="toolbox-video">
+                <source src="./static/videos/toolbox/kinematic_psm2.mp4" type="video/mp4">
+              </video>
+              <figcaption>PSM2 Kinematic Reprojection</figcaption>
+            </figure>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /Subsection 1 -->
+
+    <hr class="toolbox-divider">
+
+    <!-- ---- Subsection 2: Depth Estimation ---- -->
+    <div class="toolbox-subsection">
+      <h3 class="title is-4 toolbox-subsection-title has-text-centered">
+        <span class="icon toolbox-icon"><i class="fas fa-layer-group"></i></span>
+        Depth Estimation
+        <span class="speed-badge">4× speed</span>
+      </h3>
+      <p class="toolbox-subsection-desc has-text-centered">
+        Dense stereo depth estimation using FoundationStereo on the rectified stereo endoscope
+        stream, producing per-pixel disparity maps synchronized with all other modalities.
+      </p>
+      <div class="columns is-vcentered toolbox-columns">
+
+        <!-- Left: original video -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Original Endoscope Video</p>
+          <figure class="toolbox-video-figure">
+            <video autoplay controls loop muted playsinline class="toolbox-video">
+              <source src="./static/videos/toolbox/depth_original.mp4" type="video/mp4">
+            </video>
+            <figcaption>Original Endoscope Video</figcaption>
+          </figure>
+        </div>
+
+        <!-- Right: disparity map video -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Disparity Map</p>
+          <figure class="toolbox-video-figure">
+            <video autoplay controls loop muted playsinline class="toolbox-video">
+              <source src="./static/videos/toolbox/depth_disparity.mp4" type="video/mp4">
+            </video>
+            <figcaption>Disparity Map Video</figcaption>
+          </figure>
+        </div>
+
+      </div>
+    </div>
+    <!-- /Subsection 2 -->
+
+    <hr class="toolbox-divider">
+
+    <!-- ---- Subsection 3: Optical Flow ---- -->
+    <div class="toolbox-subsection">
+      <h3 class="title is-4 toolbox-subsection-title has-text-centered">
+        <span class="icon toolbox-icon"><i class="fas fa-wind"></i></span>
+        Optical Flow
+        <span class="speed-badge">4× speed</span>
+      </h3>
+      <p class="toolbox-subsection-desc has-text-centered">
+        Dense optical flow estimation using RAFT on sequential endoscope frames,
+        capturing instrument and tissue motion patterns for training motion-aware models.
+      </p>
+      <div class="columns is-vcentered toolbox-columns">
+
+        <!-- Left: original video -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Original Endoscope Video</p>
+          <figure class="toolbox-video-figure">
+            <video autoplay controls loop muted playsinline class="toolbox-video">
+              <source src="./static/videos/toolbox/flow_original.mp4" type="video/mp4">
+            </video>
+            <figcaption>Original Endoscope Video</figcaption>
+          </figure>
+        </div>
+
+        <!-- Right: optical flow visualization -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Optical Flow</p>
+          <figure class="toolbox-video-figure">
+            <video autoplay controls loop muted playsinline class="toolbox-video">
+              <source src="./static/videos/toolbox/flow_output.mp4" type="video/mp4">
+            </video>
+            <figcaption>Optical Flow Video</figcaption>
+          </figure>
+        </div>
+
+      </div>
+    </div>
+    <!-- /Subsection 3 -->
+
+    <hr class="toolbox-divider">
+
+    <!-- ---- Subsection 4: Annotation GUI ---- -->
+    <div class="toolbox-subsection">
+      <h3 class="title is-4 toolbox-subsection-title has-text-centered">
+        <span class="icon toolbox-icon"><i class="fas fa-tags"></i></span>
+        Annotation GUI
+      </h3>
+      <p class="toolbox-subsection-desc has-text-centered">
+        A custom PyQt-based annotation tool for labeling tool-tissue contact detection
+        and event/phase descriptions during frame-by-frame playback of synchronized recordings.
+      </p>
+      <div class="columns is-vcentered toolbox-columns">
+
+        <!-- Left: annotation GUI screenshot (static image) -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Annotation Interface</p>
+          <figure class="toolbox-video-figure">
+            <!-- TODO: Save the GUI screenshot as static/images/toolbox/annotation_gui.png -->
+            <img src="./static/images/toolbox/annotation_gui.png"
+                 alt="Data annotation GUI built with PyQt for contact detection and phase labeling"
+                 style="border-radius: 8px; width: 100%;"
+                 onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:220px\'><p style=\'font-size:1.5rem\'>🖥️</p><p><strong>Annotation GUI Screenshot</strong></p><p style=\'font-size:0.8rem;color:#888\'>Save as: <code>static/images/toolbox/annotation_gui.png</code></p></div>'">
+            <figcaption>Annotation GUI</figcaption>
+          </figure>
+        </div>
+
+        <!-- Right: operating demo — Coming Soon.
+             To add: replace this placeholder div with either:
+               <img src="./static/videos/toolbox/annotation_demo.gif" ...>   for a gif
+               <video autoplay controls loop muted playsinline>               for an mp4
+                 <source src="./static/videos/toolbox/annotation_demo.mp4" type="video/mp4">
+               </video> -->
+        <div class="column is-half">
+          <p class="toolbox-col-label">Demo</p>
+          <div class="placeholder-figure" style="min-height: 220px;">
+            <p style="font-size: 1.6rem; margin-bottom: 0.4rem;">🎥</p>
+            <p style="font-weight: 600; margin-bottom: 0.2rem;">Annotation Demo</p>
+            <p style="font-size: 0.78rem; color: #aaa; margin-top: 0.3rem;">Coming soon</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /Subsection 4 -->
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     KEY CONTRIBUTIONS — Four feature cards in a 2×2 grid
+     ================================================================ -->
+<section class="section section-alt" id="contributions">
+  <div class="container is-max-fullhd">
+    <h2 class="title is-3 has-text-centered">Key Contributions</h2>
+
+    <div class="columns is-multiline is-centered">
+
+      <!-- Card 1: Dual-Mode Synchronized Recorder -->
+      <div class="column is-half">
+        <div class="feature-card card">
+          <div class="card-content">
+            <div class="feature-icon">
+              <span class="icon is-large has-text-info">
+                <i class="fas fa-sync-alt fa-2x"></i>
+              </span>
+            </div>
+            <p class="title is-5">Dual-Mode Synchronized Recorder</p>
+            <p class="content">
+              Two synchronized recorders — <strong>online-matching</strong> for real-time use
+              (6.36 ± 4.72 ms mean latency) and <strong>offline-matching</strong> for high-fidelity
+              dataset construction (1.35 ± 0.81 ms mean latency). Time synchronization is treated as
+              a first-class design constraint across all modalities.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Upgraded Imaging Stack -->
+      <div class="column is-half">
+        <div class="feature-card card">
+          <div class="card-content">
+            <div class="feature-icon">
+              <span class="icon is-large has-text-success">
+                <i class="fas fa-camera fa-2x"></i>
+              </span>
+            </div>
+            <p class="title is-5">Upgraded Imaging Stack</p>
+            <p class="content">
+              Integration of a modern chip-on-tip stereo endoscope with the dVRK-Si via a custom
+              3D-printed holder. Achieves over <strong>30× higher Laplacian variance</strong>
+              (529.48 ± 23.77 vs 16.93 ± 2.47) compared to the default dVRK-Si scope — delivering
+              significantly sharper frames for downstream perception tasks.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Tool-Tissue Contact Sensing -->
+      <div class="column is-half">
+        <div class="feature-card card">
+          <div class="card-content">
+            <div class="feature-icon">
+              <span class="icon is-large has-text-warning">
+                <i class="fas fa-hand-paper fa-2x"></i>
+              </span>
+            </div>
+            <p class="title is-5">Tool-Tissue Contact Ground-Truth Sensing</p>
+            <p class="content">
+              A capacitive contact sensor (Arduino UNO Rev3) seamlessly integrated via the dVRK
+              digital input. Supports non-polar, monopolar, and bipolar surgical instruments.
+              Provides reliable binary contact ground truth on human and ex-vivo animal tissues.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Post-Collection Processing Toolbox -->
+      <div class="column is-half">
+        <div class="feature-card card">
+          <div class="card-content">
+            <div class="feature-icon">
+              <span class="icon is-large has-text-danger">
+                <i class="fas fa-toolbox fa-2x"></i>
+              </span>
+            </div>
+            <p class="title is-5">Post-Collection Processing Toolbox</p>
+            <p class="content">
+              A configurable and extensible toolbox covering stereo rectification, kinematic
+              reprojection via Gaussian heatmap (PSM tool-yaw → image), depth estimation
+              (FoundationStereo), optical flow (RAFT), and a custom PyQt data annotation GUI
+              for contact and event/phase labeling.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /columns -->
+  </div>
+</section>
+
+
+<!-- ================================================================
+     SYSTEM SETUP — Hardware overview + image quality comparison
+     ================================================================ -->
+<section class="section" id="system-setup">
+  <div class="container is-max-fullhd">
+    <h2 class="title is-3 has-text-centered">System Setup</h2>
+
+    <!-- Row 1: Setup photo (left) + hardware description (right) -->
+    <div class="columns is-vcentered">
+
+      <div class="column is-half">
+        <!-- TODO: Export Fig. 4 from the paper and save as static/images/system_setup.png -->
+        <figure class="image">
+          <img src="./static/images/system_setup.png"
+               alt="Overall experimental setup: dVRK-Si with custom endoscope, side camera, and contact sensor"
+               onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:320px\'><p style=\'font-size:1.5rem\'>📷</p><p><strong>Overall Experimental Setup (Fig. 4)</strong></p><p style=\'font-size:0.9rem;color:#888\'>Save as: <code>static/images/system_setup.png</code></p></div>'">
+        </figure>
+      </div>
+
+      <div class="column is-half">
+        <div class="content">
+          <h3 class="title is-4">Hardware Integration</h3>
+          <p>
+            The primary system is built on the <strong>dVRK-Si</strong> platform (Patient Side
+            Manipulator, Endoscope Camera Manipulator, Master Tool Manipulators). A secondary
+            cross-platform setup on dVRK Classic validates generalizability.
+          </p>
+          <ul>
+            <li>
+              <strong>Chip-on-tip stereo endoscope</strong> — mounted on the ECM via a custom
+              3D-printed compact holder with coaxial alignment and quick attachment
+            </li>
+            <li>
+              <strong>Side-view camera</strong> — Intel® RealSense™ RGBD for additional viewpoint
+            </li>
+            <li>
+              <strong>Capacitive contact sensor</strong> — Arduino UNO Rev3 connected to the
+              dVRK digital input for tool-tissue contact detection
+            </li>
+            <li>
+              <strong>Master + Client PC architecture</strong> — Master PC runs dVRK software
+              and image pipeline; Client PC handles contact sensor I/O
+            </li>
+          </ul>
+          <p>
+            Cameras capture at 1080p. The stereo endoscope runs at 60 Hz; the side camera at 30 Hz.
+            The dVRK kinematic/control loop runs at 1 kHz.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <!-- /Row 1 -->
+
+    <!-- Row 2: Endoscope image quality comparison (side-by-side) -->
+    <div style="margin-top: 3rem;">
+      <h3 class="title is-4 has-text-centered">Imaging Quality Comparison</h3>
+      <div class="columns is-vcentered is-centered">
+
+        <div class="column is-5 has-text-centered">
+          <!-- TODO: Save a representative dVRK-Si endoscope frame as static/images/endoscope_dvrk.png -->
+          <figure class="image">
+            <img src="./static/images/endoscope_dvrk.png"
+                 alt="dVRK-Si default endoscope sample frame"
+                 onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:220px\'><p>📷 dVRK-Si Endoscope Frame</p><p style=\'font-size:0.85rem;color:#888\'>static/images/endoscope_dvrk.png</p></div>'">
+          </figure>
+          <p class="figure-caption">
+            <strong>dVRK-Si Endoscope</strong><br>
+            Laplacian Variance: 16.93 ± 2.47
+          </p>
+        </div>
+
+        <div class="column is-5 has-text-centered">
+          <!-- TODO: Save a representative custom endoscope frame as static/images/endoscope_custom.png -->
+          <figure class="image">
+            <img src="./static/images/endoscope_custom.png"
+                 alt="Custom chip-on-tip endoscope sample frame"
+                 onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:220px\'><p>📷 Custom Endoscope Frame</p><p style=\'font-size:0.85rem;color:#888\'>static/images/endoscope_custom.png</p></div>'">
+          </figure>
+          <p class="figure-caption">
+            <strong>Our Custom Endoscope</strong><br>
+            Laplacian Variance: 529.48 ± 23.77
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <!-- /Row 2 -->
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     RESULTS — Synchronization performance + Skill assessment validation
+     ================================================================ -->
+<section class="section section-alt" id="results">
+  <div class="container is-max-fullhd">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+
+    <!-- ---- Sub-section 1: Synchronization Performance ---- -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 class="title is-4 has-text-centered">Synchronization Performance</h3>
+
+        <!-- Comparison table: online vs offline recorder -->
+        <div class="columns is-centered">
+          <div class="column is-three-quarters">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Online-Matching</th>
+                  <th>Offline-Matching</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Time latency mean ± std (ms)</td>
+                  <td>6.36 ± 4.72</td>
+                  <td><strong>1.35 ± 0.81</strong></td>
+                </tr>
+                <tr>
+                  <td>Time latency median (ms)</td>
+                  <td>5.58</td>
+                  <td><strong>1.33</strong></td>
+                </tr>
+                <tr>
+                  <td>Recording frequency (Hz)</td>
+                  <td>4.04 ± 1.69</td>
+                  <td><strong>10</strong></td>
+                </tr>
+                <tr>
+                  <td>Ready to use immediately</td>
+                  <td>✅ Yes</td>
+                  <td>⚙️ Post-collection time-matching required</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Time latency distribution figure -->
+        <div class="has-text-centered" style="margin-top: 1rem;">
+          <!-- TODO: Export Fig. 8 and save as static/images/time_latency.png -->
+          <figure class="image" style="max-width: 640px; margin: 0 auto;">
+            <img src="./static/images/time_latency.png"
+                 alt="Raw time latency distribution histograms for both recorders"
+                 onerror="this.parentElement.innerHTML='<div class=\'placeholder-figure\' style=\'min-height:200px\'><p>📷 Time Latency Distribution (Fig. 8)</p><p style=\'font-size:0.85rem;color:#888\'>Save as: static/images/time_latency.png</p></div>'">
+          </figure>
+          <p class="figure-caption">
+            Raw timestamp-delay distribution across all ROS topics for both recorders.
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <!-- /sub-section 1 -->
+
+    <!-- ---- Sub-section 2: Skill Assessment Validation ----
+         The SROCC table is omitted per project guidelines.
+         Dataset utility is described in text instead.
+    -->
+    <div class="columns is-centered" style="margin-top: 3.5rem;">
+      <div class="column is-four-fifths">
+        <h3 class="title is-4 has-text-centered">Dataset Validation via Skill Assessment</h3>
+        <div class="content has-text-justified">
+          <p>
+            To demonstrate the utility of the <span class="surgsync">SurgSync</span> dataset,
+            we validate it through a surgical skill assessment task. We train a unified
+            multi-path assessment model that jointly ingests <strong>kinematic</strong>
+            (14D Cartesian + gripper state), <strong>visual</strong> (2048D ResNet-101 features),
+            and <strong>gesture</strong> (14D one-hot encoded) modalities — all modalities are
+            per-frame aligned by our synchronized recorder, eliminating the need for additional
+            temporal interpolation. More detailed results are demonstrated in the manuscript.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /sub-section 2 -->
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     BIBTEX
+     ================================================================ -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-fullhd content">
+    <h2 class="title">BibTeX</h2>
+    <!-- TODO: Update with official ICRA 2026 citation details once published -->
+    <pre><code>@inproceedings{zhou2026surgsync,
+  author    = {Zhou, Haoying and Liu, Chang and Wu, Yimeng and Wu, Junlin
+               and Wu, Zijian and Lee, Yu Chung and Martuscelli, Sara
+               and Salcudean, Septimiu E. and Fischer, Gregory S.
+               and Kazanzides, Peter},
+  title     = {{SurgSync}: Time-Synchronized Multi-modal Data Collection
+               Framework and Dataset for Surgical Robotics},
+  booktitle = {IEEE International Conference on Robotics and Automation (ICRA)},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <!-- TODO: Replace # with actual paper PDF and GitHub links when available -->
+      <a class="icon-link" href="#" aria-label="Paper PDF">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="#" style="margin-left: 0.5rem;" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This website is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              Creative Commons Attribution-ShareAlike 4.0 International License
+            </a>.
+          </p>
+          <p>
+            Website template adapted from
+            <a href="https://nerfies.github.io" target="_blank" rel="noopener noreferrer">Nerfies</a>.
+            We thank the authors for making their source code publicly available.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>

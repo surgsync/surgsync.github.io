@@ -1,0 +1,465 @@
+/* ================================================================
+   SurgSync Website — Custom Styles
+   Extends Bulma CSS Framework (bulma.min.css)
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   FONT SIZE CONFIGURATION
+   Adjust these values to scale the entire site up or down.
+   Bulma's default base is 1rem = 16px.
+   We override the html root to 20px so all rem-based sizes scale
+   proportionally — change this single value to resize everything.
+   ---------------------------------------------------------------- */
+html {
+  font-size: 20px; /* base: Bulma default is 16px; increase for larger text */
+}
+
+/* ---- Base Typography ---- */
+body {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 1rem;   /* inherits html base above */
+  line-height: 1.7;  /* slightly more generous line spacing for readability */
+}
+
+/* ---- Navigation ---- */
+.footer .icon-link {
+  font-size: 25px;
+  color: #000;
+}
+
+.link-block a {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* ---- Publication Header ---- */
+.publication-title {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 2.8rem !important;  /* increase this value to make the title larger */
+  line-height: 1.25;
+}
+
+.publication-authors {
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Clickable author names styled in blue */
+.publication-authors a {
+  color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+  text-decoration: underline;
+}
+
+/* Each author block stays inline so wrapping looks natural */
+.author-block {
+  display: inline-block;
+}
+
+/* Venue badge (e.g., "ICRA 2026") */
+.publication-venue {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1.1rem !important;
+  font-weight: bold;
+  padding: 0.4em 1.2em;
+  border-radius: 20px;
+}
+
+/* ---- Coming Soon Buttons ----
+   Applied to link-block spans whose content is not yet available.
+   Shows a "Coming Soon" tooltip on hover and greys out the button.
+   To activate a link: remove class="coming-soon-link" from the <span>
+   and add href="..." + class="external-link" back to the <a> tag. */
+.coming-soon-link {
+  position: relative;  /* anchor for the tooltip pseudo-element */
+  cursor: not-allowed;
+}
+
+.coming-soon-link a[disabled] {
+  pointer-events: none;  /* block all clicks */
+  opacity: 0.55;         /* visually greyed out */
+}
+
+/* Inline "(coming soon)" label inside the button */
+.coming-soon-badge {
+  font-size: 0.65em;
+  font-style: italic;
+  opacity: 0.85;
+  margin-left: 0.35em;
+}
+
+/* ---- Badge Row Break ----
+   Forces a new line between the two rows of link badges in the hero.
+   Works because the parent .publication-links uses flex-wrap: wrap. */
+.badge-row-break {
+  flex-basis: 100%;   /* takes the full row width, pushing next items to new line */
+  height: 0.4rem;     /* small vertical gap between the two rows */
+}
+
+/* Make publication-links a flex container so badge-row-break works */
+.publication-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* ---- Coming Soon Section Placeholder ----
+   Used in the Paper and Video sections while content is pending. */
+.coming-soon-notice {
+  background: #f9f9f9;
+  border: 2px dashed #d0d0d0;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.coming-soon-icon {
+  margin-bottom: 0.75rem;
+}
+
+/* ---- SurgSync Brand Name Styling ---- */
+/* Usage: <span class="surgsync">SurgSync</span> */
+.surgsync {
+  font-variant: small-caps;
+  font-weight: bold;
+  color: #1565c0;
+}
+
+/* ---- Teaser / Hero Section ---- */
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* ---- Responsive 16:9 Video Embed ---- */
+/* Works for both YouTube iframes and local <video> */
+.publication-video {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  border-radius: 10px !important;
+}
+
+.publication-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ================================================================
+   AUTHORS SECTION
+   Three fixed rows: 4 / 3 / 3 authors, square photos with initials fallback.
+   ================================================================ */
+
+/* Each row is a centered flex line; rows stack vertically with a gap */
+.author-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.75rem 2.5rem;     /* row-gap column-gap */
+  margin-top: 1.75rem;
+}
+
+/* Individual author card */
+.author-profile {
+  text-align: center;
+  width: 150px;            /* fixed width keeps all cards aligned */
+  flex-shrink: 0;
+}
+
+/* Square author photo — slight rounding for a polished look */
+.author-photo {
+  width: 130px;
+  height: 130px;
+  border-radius: 10px;     /* square with softened corners */
+  object-fit: cover;       /* crops to square without distortion */
+  border: 2px solid #e0e0e0;
+  margin: 0 auto 0.6rem;
+  display: block;
+}
+
+/* Fallback: colored square tile with initials when photo is not available.
+   Each author sets a unique background color inline (e.g., style="background:#1565c0;"). */
+.author-initials {
+  width: 130px;
+  height: 130px;
+  border-radius: 10px;     /* matches the square photo shape */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 auto 0.6rem;
+  letter-spacing: 0.05em;
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Author name */
+.author-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.2rem;
+  line-height: 1.35;
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Clickable author names */
+.author-name a {
+  color: hsl(204, 86%, 53%) !important;
+  text-decoration: none;
+}
+
+.author-name a:hover {
+  text-decoration: underline;
+}
+
+/* Affiliation text under the name */
+.author-affiliation {
+  font-size: 0.82rem;
+  color: #888;
+  line-height: 1.3;
+}
+
+/* ================================================================
+   DATASET TABLE
+   Two-row header showing Online / Offline split per skill level.
+   ================================================================ */
+
+.dataset-table {
+  font-size: 0.85rem;
+}
+
+/* Task name column header */
+.dataset-th-task {
+  vertical-align: middle !important;
+  background-color: #f5f5f5 !important;
+}
+
+/* Skill-level group header cells */
+.dataset-th-novice      { background-color: #e8f5e9 !important; color: #2e7d32; }
+.dataset-th-experienced { background-color: #e3f2fd !important; color: #1565c0; }
+.dataset-th-professional{ background-color: #fce4ec !important; color: #ad1457; }
+
+/* Online / Offline sub-header cells */
+.dataset-th-online  { background-color: #e1f5fe !important; color: #0277bd; font-weight: 600; }
+.dataset-th-offline { background-color: #f3e5f5 !important; color: #6a1b9a; font-weight: 600; }
+
+/* Total column header */
+.dataset-th-total {
+  vertical-align: middle !important;
+  background-color: #f5f5f5 !important;
+}
+
+/* Data cells: subtle background tint to distinguish modes */
+.dataset-online  { background-color: #f0f9ff !important; }
+.dataset-offline { background-color: #fdf6ff !important; }
+
+/* Footer totals row */
+.dataset-total-row td {
+  background-color: #fafafa !important;
+  border-top: 2px solid #ccc !important;
+}
+
+/* Color legend below the table */
+.dataset-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.legend-online  { color: #0277bd; font-weight: 600; }
+.legend-offline { color: #6a1b9a; font-weight: 600; }
+.legend-note    { color: #999; }
+
+/* ================================================================
+   POST-COLLECTION TOOLBOX SECTION
+   Two-column layout with video pairs per subsection.
+   ================================================================ */
+
+/* Individual subsection block */
+.toolbox-subsection {
+  margin-bottom: 2.5rem;
+}
+
+.toolbox-subsection:last-child {
+  margin-bottom: 0;
+}
+
+/* Subsection title with icon */
+.toolbox-subsection-title {
+  margin-bottom: 0.75rem !important;
+}
+
+.toolbox-icon {
+  color: #1565c0;
+  margin-right: 0.4rem;
+}
+
+/* Short description under the subsection title */
+.toolbox-subsection-desc {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Small badge indicating pre-rendered video speed, shown next to subsection titles */
+.speed-badge {
+  display: inline-block;
+  font-size: 0.55em;       /* relative to the h3 — stays visually small */
+  font-weight: 600;
+  color: #fff;
+  background: #e65100;     /* orange — draws the eye without clashing with icons */
+  border-radius: 4px;
+  padding: 0.15em 0.5em;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+  margin-left: 0.5em;
+  white-space: nowrap;
+}
+
+/* Column label (e.g., "Original Video", "Kinematic Reprojection") */
+.toolbox-col-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #555;
+  margin-bottom: 0.5rem;
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Wrapper for the two-column video layout — adds a little breathing room */
+.toolbox-columns {
+  margin-top: 0.5rem;
+}
+
+/* Figure wrapper for each video slot */
+.toolbox-video-figure {
+  margin: 0;  /* reset browser figure defaults */
+}
+
+/* Video element: full-width, rounded corners.
+   No background colour — JS hides the element until data loads,
+   so there is no black-box flash while the browser awaits a 404. */
+.toolbox-video-figure video {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Figcaption under each video (hidden visually — used by JS for placeholder labels) */
+.toolbox-video-figure figcaption {
+  font-size: 0.8rem;
+  color: #888;
+  text-align: center;
+  margin-top: 0.4rem;
+}
+
+/* Stack PSM1 / PSM2 videos vertically in the kinematic-reprojection right column */
+.stacked-videos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Horizontal rule divider between toolbox subsections */
+.toolbox-divider {
+  border: none;
+  border-top: 1px solid #e8e8e8;
+  margin: 2rem 0;
+}
+
+/* ---- Feature Cards ---- */
+/* Used in the "Key Contributions" section */
+.feature-card {
+  height: 100%;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14) !important;
+}
+
+.feature-card .card-content {
+  padding: 1.75rem;
+}
+
+.feature-icon {
+  margin-bottom: 1rem;
+}
+
+/* ---- Placeholder Figures ---- */
+/* Shown in place of images/videos that haven't been added yet.
+   The onerror attribute in <img> tags switches to these divs.
+   JS does the same for failed <video> elements. */
+.placeholder-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0f4f8;
+  border: 2px dashed #b0bec5;
+  border-radius: 8px;
+  padding: 2rem;
+  min-height: 200px;
+  color: #546e7a;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* ---- Tables ---- */
+.table thead th {
+  background-color: #f5f5f5;
+}
+
+/* ---- Results / Media Carousel ---- */
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 0; /* removes whitespace gap under inline images/videos */
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+/* ---- Section Backgrounds ---- */
+/* Alternating white / light-grey backgrounds help visually separate sections */
+.section-alt {
+  background-color: #f9f9f9;
+}
+
+/* ---- Figure Captions ---- */
+.figure-caption {
+  font-size: 0.85rem;  /* slightly smaller than body, but scales with html base */
+  color: #555;
+  text-align: center;
+  margin-top: 0.6rem;
+}
