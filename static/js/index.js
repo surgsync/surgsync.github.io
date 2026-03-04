@@ -44,41 +44,35 @@ $(document).ready(function () {
      Handles any <input type="range"> with class="slider". */
   bulmaSlider.attach();
 
-  /* ---- Mobile Video Preload Optimization ----
-     On mobile connections, defer video preloading until the user scrolls
-     near the toolbox section. This reduces initial page weight significantly
-     (videos are one of the heaviest resources on the page).
-     On desktop, videos preload normally via the browser's default behavior. */
-  if (window.innerWidth <= 768) {
-    document.querySelectorAll('.toolbox-video').forEach(function (video) {
-      video.setAttribute('preload', 'none');
-    });
+  /* ---- Toolbox Video Loading & Placeholder Handling ----
+
+     PROBLEM SOLVED: Videos have `autoplay` in the HTML, so the browser
+     starts fetching them during HTML parsing — often BEFORE this JS runs.
+     If `loadeddata` fires before we attach our listener, the video stays
+     hidden forever behind the placeholder.  Refreshing "fixes" it only
+     because timing shifts with cached resources.
+
+     FIX: After attaching the listener, immediately check video.readyState.
+     readyState >= 2 (HAVE_CURRENT_DATA) means `loadeddata` has already
+     fired, so we reveal the video right away.  We also listen on `<source>`
+     error events (not `<video>` error) because that's where 404s surface
+     when using <source> children.
+
+     MOBILE OPTIMIZATION: Instead of a blanket `preload="none"` (which
+     prevents videos from loading at all — even real ones), we use
+     IntersectionObserver to defer loading until the toolbox section is
+     near the viewport.  This saves bandwidth on initial load while still
+     loading videos when the user scrolls down.
+  */
+
+  /* Helper: reveal a video and hide its placeholder */
+  function revealVideo(video, placeholder) {
+    placeholder.style.display = 'none';
+    video.style.display = 'block';
   }
 
-  /* ---- Toolbox Video Placeholder Handling ----
-     Strategy: for every .toolbox-video element, insert a "Coming Soon"
-     placeholder immediately on DOM-ready and hide the video element.
-     The video is only revealed if it actually receives data (loadeddata event).
-
-     This approach is more reliable than timeout-based or error-event-based
-     detection because:
-       - No black-box flash (video is hidden from the start)
-       - No race condition with 404 response timing
-       - Works correctly even for the stacked PSM1/PSM2 layout
-  */
-  document.querySelectorAll('.toolbox-video').forEach(function (video) {
-    var fig = video.closest('figure');
-    if (!fig) return;
-
-    /* Read the caption text to use as the placeholder label */
-    var captionEl = fig.querySelector('figcaption');
-    var caption = captionEl ? captionEl.textContent.trim() : 'Video';
-
-    /* Read the source path to display in the placeholder */
-    var srcEl = video.querySelector('source');
-    var src = srcEl ? srcEl.getAttribute('src') : '';
-
-    /* Build the "Coming Soon" placeholder div */
+  /* Helper: build a "Coming Soon" placeholder for a missing video */
+  function buildPlaceholder(caption, src) {
     var ph = document.createElement('div');
     ph.className = 'placeholder-figure toolbox-video-placeholder';
     ph.style.minHeight = '185px';
@@ -89,18 +83,108 @@ $(document).ready(function () {
       (src
         ? '<p style="font-size:0.7rem;color:#ccc;margin-top:0.2rem"><code>' + src + '</code></p>'
         : '');
+    return ph;
+  }
 
-    /* Insert placeholder before the video and hide the video immediately.
-       The placeholder is visible by default; the video is hidden until ready. */
+  var isMobile = window.innerWidth <= 768;
+
+  document.querySelectorAll('.toolbox-video').forEach(function (video) {
+    var fig = video.closest('figure');
+    if (!fig) return;
+
+    /* Read caption and source for the placeholder */
+    var captionEl = fig.querySelector('figcaption');
+    var caption = captionEl ? captionEl.textContent.trim() : 'Video';
+    var srcEl = video.querySelector('source');
+    var src = srcEl ? srcEl.getAttribute('src') : '';
+
+    /* Create and insert placeholder; hide the video until data arrives */
+    var ph = buildPlaceholder(caption, src);
     fig.insertBefore(ph, video);
     video.style.display = 'none';
 
-    /* Reveal the video (and hide placeholder) only when actual data is loaded.
-       loadeddata fires once the browser has enough data to play at least one frame. */
-    video.addEventListener('loadeddata', function () {
-      ph.style.display = 'none';
-      video.style.display = 'block';
-    });
+    /* --- Case 1: Video already loaded (race condition fix) ---
+       readyState >= 2 means HAVE_CURRENT_DATA — the browser already
+       has at least one frame.  This happens when:
+         - The video is cached from a previous visit
+         - The file is small and loaded before DOMContentLoaded
+         - The browser aggressively prefetched the resource */
+    if (video.readyState >= 2) {
+      revealVideo(video, ph);
+      return;  /* done — no need for listeners */
+    }
+
+    /* --- Case 2: Video is still loading — attach listeners ---
+       Listen for BOTH loadeddata and canplay for maximum browser
+       compatibility (some mobile browsers skip loadeddata in edge cases). */
+    var revealed = false;
+    function onVideoReady() {
+      if (revealed) return;  /* prevent double-trigger */
+      revealed = true;
+      revealVideo(video, ph);
+    }
+
+    video.addEventListener('loadeddata', onVideoReady);
+    video.addEventListener('canplay', onVideoReady);
+
+    /* --- Case 3: Video file doesn't exist (404) ---
+       Error events for <source>-based videos fire on the <source> element,
+       NOT the <video> element.  If the source fails, the placeholder stays
+       visible (which is the correct "Coming Soon" behavior). */
+    if (srcEl) {
+      srcEl.addEventListener('error', function () {
+        /* Placeholder is already visible — nothing to do.
+           Pause the video element to stop any further loading attempts. */
+        video.pause();
+        video.removeAttribute('autoplay');
+      });
+    }
   });
+
+  /* ---- Mobile: Lazy-load videos via IntersectionObserver ----
+     On mobile, defer actual video loading until the toolbox section
+     scrolls near the viewport.  This saves bandwidth on initial page
+     load without permanently preventing videos from loading (which
+     the previous preload="none" approach did).
+
+     Strategy: set preload="none" initially, then restore "auto" and
+     trigger load() when the section enters the viewport margin. */
+  if (isMobile && 'IntersectionObserver' in window) {
+    var toolboxSection = document.getElementById('toolbox');
+    if (toolboxSection) {
+      var videos = toolboxSection.querySelectorAll('.toolbox-video');
+
+      /* Only apply lazy-loading if videos haven't loaded yet */
+      var unloadedVideos = [];
+      videos.forEach(function (v) {
+        if (v.readyState < 2) {
+          v.setAttribute('preload', 'none');
+          v.pause();
+          unloadedVideos.push(v);
+        }
+      });
+
+      if (unloadedVideos.length > 0) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              /* Toolbox is near the viewport — start loading all videos */
+              unloadedVideos.forEach(function (v) {
+                v.setAttribute('preload', 'auto');
+                v.load();  /* restart loading with the new preload value */
+              });
+              observer.disconnect();  /* only need to trigger once */
+            }
+          });
+        }, {
+          /* Start loading when the section is within 300px of the viewport,
+             giving the browser a head start before the user scrolls to it */
+          rootMargin: '300px'
+        });
+
+        observer.observe(toolboxSection);
+      }
+    }
+  }
 
 });
