@@ -12,6 +12,11 @@
    ---------------------------------------------------------------- */
 html {
   font-size: 20px; /* base: Bulma default is 16px; increase for larger text */
+  /* Offset anchor scroll targets so they aren't hidden behind the sticky navbar */
+  scroll-padding-top: 4rem;
+  /* Prevent iOS Safari from inflating text size in landscape mode */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ---- Base Typography ---- */
@@ -22,6 +27,19 @@ body {
 }
 
 /* ---- Navigation ---- */
+
+/* Sticky navbar stays visible while scrolling — users can always access nav.
+   Uses position:sticky for progressive enhancement (older browsers fall back to static). */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;   /* above section content but below modals */
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
 .footer .icon-link {
   font-size: 25px;
   color: #000;
@@ -166,51 +184,55 @@ body {
 .author-row {
   display: flex;
   justify-content: center;
-  gap: 1.75rem 2.5rem;     /* row-gap column-gap */
+  gap: 2rem 2.75rem;       /* row-gap column-gap — generous spacing for larger photos */
   margin-top: 1.75rem;
 }
 
-/* Individual author card */
+/* Individual author card — width accommodates the larger photo + name text */
 .author-profile {
   text-align: center;
-  width: 150px;            /* fixed width keeps all cards aligned */
+  width: 170px;
   flex-shrink: 0;
 }
 
-/* Square author photo — slight rounding for a polished look */
+/* Square author photo — sized for face recognition at desktop viewing distance.
+   HCI guideline: portraits need ≥ 120px for reliable face identification;
+   150px provides comfortable recognition with room for detail. */
 .author-photo {
-  width: 130px;
-  height: 130px;
+  width: 150px;
+  height: 150px;
   border-radius: 10px;     /* square with softened corners */
   object-fit: cover;       /* crops to square without distortion */
   border: 2px solid #e0e0e0;
-  margin: 0 auto 0.6rem;
+  margin: 0 auto 0.7rem;
   display: block;
 }
 
 /* Fallback: colored square tile with initials when photo is not available.
    Each author sets a unique background color inline (e.g., style="background:#1565c0;"). */
 .author-initials {
-  width: 130px;
-  height: 130px;
+  width: 150px;
+  height: 150px;
   border-radius: 10px;     /* matches the square photo shape */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 2.1rem;
   font-weight: 700;
   color: white;
-  margin: 0 auto 0.6rem;
+  margin: 0 auto 0.7rem;
   letter-spacing: 0.05em;
   font-family: 'Google Sans', sans-serif;
 }
 
-/* Author name */
+/* Author name — primary label on the card, must be clearly readable.
+   At 20px base, 1.05rem = 21px — comfortably above the 16px WCAG minimum
+   and visually prominent as the key identifier for each person. */
 .author-name {
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #333;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
   line-height: 1.35;
   font-family: 'Google Sans', sans-serif;
 }
@@ -225,10 +247,11 @@ body {
   text-decoration: underline;
 }
 
-/* Affiliation text under the name */
+/* Affiliation text under the name — secondary label, slightly smaller than name
+   but still comfortably readable (0.88rem = 17.6px at 20px base). */
 .author-affiliation {
-  font-size: 0.82rem;
-  color: #888;
+  font-size: 0.88rem;
+  color: #777;
   line-height: 1.3;
 }
 
@@ -463,3 +486,580 @@ body {
   text-align: center;
   margin-top: 0.6rem;
 }
+
+
+/* ================================================================
+   RESPONSIVE DESIGN — Media Queries
+   Follows mobile-first progressive enhancement.
+   Breakpoints aligned with Bulma:
+     - Mobile:    ≤ 768px   (phones — portrait & landscape)
+     - Tablet:    769–1023px (iPad portrait, small tablets)
+     - Desktop:   1024–1215px (iPad landscape, small laptops)
+     - Widescreen: ≥ 1216px (standard desktops and up)
+
+   HCI Principles applied:
+     - Fitts's Law: touch targets ≥ 44px on mobile
+     - Visual hierarchy preserved across all sizes
+     - Readable typography at every viewport width
+     - Sufficient whitespace to prevent cramped layouts
+     - Consistent visual language across breakpoints
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   MOBILE — max-width: 768px
+   Primary phone breakpoint. Stacks all columns, shrinks type,
+   reduces spacing, and enlarges touch targets.
+   ---------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+
+  /* ---- Base Typography ----
+     20px base is too large on a ~375px viewport.
+     Scale down to 16px (Bulma default) for comfortable reading.
+     All rem-based sizes cascade from this change. */
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    line-height: 1.6;  /* slightly tighter line height on small screens */
+  }
+
+  /* ---- Hero / Title ----
+     The 2.8rem title at 20px = 56px — far too large for mobile.
+     Scale to a comfortable headline size that wraps gracefully. */
+  .publication-title {
+    font-size: 1.6rem !important;
+    line-height: 1.3;
+    padding: 0 0.5rem;
+  }
+
+  /* Venue badge — slightly smaller on mobile */
+  .publication-venue {
+    font-size: 0.9rem !important;
+    padding: 0.3em 0.9em;
+  }
+
+  /* Affiliations line in hero — tighter on mobile */
+  .hero-body .is-size-6 {
+    font-size: 0.8rem !important;
+    line-height: 1.4;
+  }
+
+  /* ---- Badge Buttons ----
+     Ensure touch targets meet 44px minimum (Fitts's Law).
+     Stack badges vertically for better thumb reachability. */
+  .publication-links {
+    gap: 0.4rem;
+  }
+
+  .publication-links .button {
+    font-size: 0.8rem;
+    min-height: 44px;     /* minimum touch target height */
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Reduce hero section padding on mobile */
+  .hero .hero-body {
+    padding: 2rem 1rem 1rem;
+  }
+
+  /* ---- Teaser ---- */
+  .teaser .hero-body {
+    padding-bottom: 1.5rem;
+  }
+
+  .teaser .subtitle {
+    font-size: 0.9rem !important;
+    line-height: 1.5;
+    padding: 0 0.25rem;
+  }
+
+  /* ---- Section Titles ---- */
+  .title.is-3 {
+    font-size: 1.4rem !important;
+  }
+
+  .title.is-4 {
+    font-size: 1.15rem !important;
+  }
+
+  .title.is-5 {
+    font-size: 1rem !important;
+  }
+
+  /* ---- Section Padding ----
+     Reduce horizontal and vertical padding on mobile to reclaim space. */
+  .section {
+    padding: 2rem 1rem;
+  }
+
+  /* ---- Authors Section ----
+     On mobile, show 2 authors per row instead of 3–4.
+     Photos sized for face recognition on small screens (≥115px).
+     Names at 0.92rem = 14.7px — above WCAG minimum for legibility. */
+  .author-row {
+    flex-wrap: wrap;
+    gap: 1.25rem 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .author-profile {
+    width: 140px;
+  }
+
+  .author-photo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .author-initials {
+    width: 120px;
+    height: 120px;
+    font-size: 1.6rem;
+  }
+
+  .author-name {
+    font-size: 0.92rem;
+  }
+
+  .author-affiliation {
+    font-size: 0.8rem;
+  }
+
+  /* ---- Abstract ----
+     Full-width on mobile for maximum readability. */
+  #abstract .column.is-four-fifths {
+    width: 100%;
+  }
+
+  /* ---- Dataset Section ----
+     Table font even smaller on mobile for better fit.
+     The overflow-x:auto wrapper already handles horizontal scroll. */
+  .dataset-table {
+    font-size: 0.72rem;
+  }
+
+  .dataset-table th,
+  .dataset-table td {
+    padding: 0.4em 0.3em;
+    white-space: nowrap;  /* prevent awkward line breaks inside cells */
+  }
+
+  .dataset-legend {
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* ---- Toolbox Section ----
+     Videos stack vertically (Bulma handles column stacking).
+     Reduce spacing between subsections. */
+  .toolbox-subsection {
+    margin-bottom: 1.75rem;
+  }
+
+  .toolbox-subsection-title {
+    font-size: 1.1rem !important;
+  }
+
+  .toolbox-subsection-desc {
+    font-size: 0.82rem;
+    max-width: 100%;
+    padding: 0 0.25rem;
+  }
+
+  .toolbox-col-label {
+    font-size: 0.78rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .speed-badge {
+    font-size: 0.5em;
+  }
+
+  .stacked-videos {
+    gap: 0.5rem;
+  }
+
+  /* ---- Feature Cards (Key Contributions) ----
+     Single column on mobile — Bulma stacks .column.is-half.
+     Reduce internal padding for compact display. */
+  .feature-card .card-content {
+    padding: 1.25rem;
+  }
+
+  .feature-card .content {
+    font-size: 0.88rem;
+  }
+
+  /* ---- System Setup ----
+     Image quality comparison: stack vertically on mobile. */
+  #system-setup .column.is-5 {
+    margin-bottom: 1.5rem;
+  }
+
+  .figure-caption {
+    font-size: 0.78rem;
+  }
+
+  /* ---- Results Section ----
+     Table needs to breathe on mobile. */
+  #results .table {
+    font-size: 0.82rem;
+  }
+
+  #results .table th,
+  #results .table td {
+    padding: 0.5em 0.4em;
+  }
+
+  /* ---- BibTeX ----
+     Pre block should scroll horizontally, not overflow the viewport. */
+  #BibTeX pre {
+    font-size: 0.72rem;
+    padding: 1rem;
+    overflow-x: auto;
+    white-space: pre;      /* preserve formatting but allow scroll */
+    word-break: normal;
+  }
+
+  /* ---- Coming Soon Notice ---- */
+  .coming-soon-notice {
+    padding: 2rem 1rem;
+  }
+
+  /* ---- Footer ---- */
+  .footer {
+    padding: 2rem 1rem;
+  }
+
+  .footer .content p {
+    font-size: 0.82rem;
+  }
+
+  /* ---- Placeholder Figures ---- */
+  .placeholder-figure {
+    padding: 1.25rem;
+    min-height: 150px;
+    font-size: 0.85rem;
+  }
+
+  /* ---- Navigation ----
+     Ensure mobile menu items have adequate touch targets.
+     Menu items should be tall enough for comfortable tapping. */
+  .navbar-menu.is-active {
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-menu .navbar-item {
+    min-height: 48px;       /* comfortable tap target */
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+/* ----------------------------------------------------------------
+   TABLET — 769px to 1023px
+   iPad portrait and small tablets. Moderate scaling.
+   ---------------------------------------------------------------- */
+@media screen and (min-width: 769px) and (max-width: 1023px) {
+
+  /* Slightly smaller base for tablets — 18px is a good middle ground */
+  html {
+    font-size: 18px;
+  }
+
+  /* Title scales down moderately */
+  .publication-title {
+    font-size: 2.2rem !important;
+  }
+
+  /* Authors — allow wrapping with moderately sized cards */
+  .author-row {
+    flex-wrap: wrap;
+    gap: 1.5rem 2rem;
+  }
+
+  .author-profile {
+    width: 155px;
+  }
+
+  .author-photo {
+    width: 135px;
+    height: 135px;
+  }
+
+  .author-initials {
+    width: 135px;
+    height: 135px;
+    font-size: 1.85rem;
+  }
+
+  .author-name {
+    font-size: 1rem;
+  }
+
+  .author-affiliation {
+    font-size: 0.85rem;
+  }
+
+  /* Section padding — moderate reduction */
+  .section {
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* Dataset table — slightly smaller for tablet */
+  .dataset-table {
+    font-size: 0.78rem;
+  }
+
+  /* Toolbox descriptions — allow wider on tablet */
+  .toolbox-subsection-desc {
+    max-width: 90%;
+  }
+
+  /* Feature card content — moderate padding */
+  .feature-card .card-content {
+    padding: 1.5rem;
+  }
+
+  /* BibTeX */
+  #BibTeX pre {
+    font-size: 0.78rem;
+    overflow-x: auto;
+  }
+}
+
+/* ----------------------------------------------------------------
+   SMALL DESKTOP — 1024px to 1215px
+   iPad landscape, smaller laptops. Minor tweaks.
+   ---------------------------------------------------------------- */
+@media screen and (min-width: 1024px) and (max-width: 1215px) {
+
+  html {
+    font-size: 19px;
+  }
+
+  .publication-title {
+    font-size: 2.5rem !important;
+  }
+}
+
+/* ----------------------------------------------------------------
+   LANDSCAPE PHONES — short & wide viewports
+   Prevents the hero from consuming the entire viewport height.
+   ---------------------------------------------------------------- */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+
+  .hero .hero-body {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Authors: show 3 per row in landscape since we have the width.
+     Slightly smaller than portrait to fit more per row. */
+  .author-row {
+    gap: 1rem 1.5rem;
+  }
+
+  .author-profile {
+    width: 120px;
+  }
+
+  .author-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .author-initials {
+    width: 100px;
+    height: 100px;
+    font-size: 1.4rem;
+  }
+
+  .author-name {
+    font-size: 0.85rem;
+  }
+}
+
+/* ----------------------------------------------------------------
+   VERY SMALL PHONES — max-width: 374px
+   Older iPhones (SE 1st gen), narrow Android devices.
+   Extra size reductions to prevent overflow.
+   ---------------------------------------------------------------- */
+@media screen and (max-width: 374px) {
+
+  html {
+    font-size: 15px;
+  }
+
+  .publication-title {
+    font-size: 1.4rem !important;
+  }
+
+  /* Authors: single column on very narrow screens — since we have
+     the full width, photos can stay generous for face recognition. */
+  .author-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .author-profile {
+    width: 145px;
+  }
+
+  .author-photo {
+    width: 125px;
+    height: 125px;
+  }
+
+  .author-initials {
+    width: 125px;
+    height: 125px;
+    font-size: 1.7rem;
+  }
+
+  .author-name {
+    font-size: 0.92rem;
+  }
+
+  /* Badges stack fully vertical */
+  .publication-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .badge-row-break {
+    display: none;  /* not needed when already vertical */
+  }
+
+  .publication-links .button {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  /* Dataset table — minimum viable font */
+  .dataset-table {
+    font-size: 0.65rem;
+  }
+}
+
+/* ----------------------------------------------------------------
+   LARGE / HIGH-DPI DESKTOPS — min-width: 1408px
+   Widescreen monitors. Increase content max-width and
+   allow slightly larger type for comfortable reading distance.
+   ---------------------------------------------------------------- */
+@media screen and (min-width: 1408px) {
+
+  html {
+    font-size: 20px;  /* restore the intended large base */
+  }
+}
+
+/* ----------------------------------------------------------------
+   PRINT STYLES
+   Basic print-friendly overrides for users printing the page.
+   ---------------------------------------------------------------- */
+@media print {
+
+  /* Reset font size for print */
+  html {
+    font-size: 12pt;
+  }
+
+  /* Hide non-essential interactive elements */
+  .navbar,
+  .coming-soon-link,
+  .coming-soon-notice,
+  .placeholder-figure,
+  footer {
+    display: none !important;
+  }
+
+  /* Remove section backgrounds */
+  .section-alt {
+    background-color: #fff;
+  }
+
+  /* Ensure all content is visible */
+  .section {
+    padding: 1rem 0;
+  }
+
+  /* Remove card shadows for print */
+  .feature-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+  }
+}
+
+/* ----------------------------------------------------------------
+   GLOBAL RESPONSIVE HELPERS
+   Utility classes and base styles that improve responsiveness
+   regardless of breakpoint.
+   ---------------------------------------------------------------- */
+
+/* Ensure all images are responsive by default */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal overflow — applied at body level to avoid
+   clipping Bulma's negative-margin column layouts within .container. */
+body {
+  overflow-x: hidden;
+}
+
+/* Smooth transitions for interactive elements — respects
+   user's reduced-motion preference for accessibility. */
+@media (prefers-reduced-motion: no-preference) {
+  a, .button, .navbar-item, .feature-card {
+    transition: all 0.2s ease;
+  }
+}
+
+/* Users who prefer reduced motion — disable transitions */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+}
+
+/* Improve focus visibility for keyboard navigation (accessibility).
+   Only shows the outline when user is navigating via keyboard,
+   not when clicking with a mouse. */
+:focus-visible {
+  outline: 3px solid hsl(204, 86%, 53%);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hide focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth scrolling for anchor links (in-page navigation).
+   Respects reduced-motion preference. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Note: -webkit-text-size-adjust is set in the top-level html rule above
+   to prevent iOS Safari from inflating text in landscape mode. */

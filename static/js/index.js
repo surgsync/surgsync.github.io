@@ -15,6 +15,17 @@ $(document).ready(function () {
     $(".navbar-menu").toggleClass("is-active");
   });
 
+  /* ---- Close Mobile Menu on Link Click ----
+     On single-page sites, tapping a nav link should close the menu
+     so the user can see the section they navigated to. Without this,
+     the menu stays open and obscures the content. */
+  $(".navbar-menu .navbar-item").click(function () {
+    if ($(".navbar-burger").is(":visible")) {
+      $(".navbar-burger").removeClass("is-active");
+      $(".navbar-menu").removeClass("is-active");
+    }
+  });
+
   /* ---- Initialize Bulma Carousels ----
      Any element with class="carousel" on the page will be initialized.
      Adjust slidesToShow for the number of items visible at once. */
@@ -32,6 +43,17 @@ $(document).ready(function () {
   /* ---- Initialize Bulma Sliders ----
      Handles any <input type="range"> with class="slider". */
   bulmaSlider.attach();
+
+  /* ---- Mobile Video Preload Optimization ----
+     On mobile connections, defer video preloading until the user scrolls
+     near the toolbox section. This reduces initial page weight significantly
+     (videos are one of the heaviest resources on the page).
+     On desktop, videos preload normally via the browser's default behavior. */
+  if (window.innerWidth <= 768) {
+    document.querySelectorAll('.toolbox-video').forEach(function (video) {
+      video.setAttribute('preload', 'none');
+    });
+  }
 
   /* ---- Toolbox Video Placeholder Handling ----
      Strategy: for every .toolbox-video element, insert a "Coming Soon"
