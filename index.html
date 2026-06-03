@@ -149,12 +149,11 @@
                 </a>
               </span>
 
-              <!-- Dataset — Coming Soon -->
-              <span class="link-block coming-soon-link">
-                <a class="button is-normal is-rounded is-dark" disabled>
+              <!-- Dataset — Hugging Face -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/jackzhy/surgsync" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener noreferrer">
                   <span class="icon"><i class="far fa-images"></i></span>
                   <span>Dataset</span>
-                  <span class="coming-soon-badge">(Coming Soon)</span>
                 </a>
               </span>
 
@@ -163,12 +162,11 @@
 
               <!-- ROW 2: Code-Toolbox · Code-Framework -->
 
-              <!-- Post-Collection Processing Toolbox Code — Coming Soon -->
-              <span class="link-block coming-soon-link">
-                <a class="button is-normal is-rounded is-dark" disabled>
+              <!-- Post-Collection Processing Toolbox Code — GitHub -->
+              <span class="link-block">
+                <a href="https://github.com/jackzhy96/dvrk_multimodal_data_collection" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noopener noreferrer">
                   <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code-Toolbox</span>
-                  <span class="coming-soon-badge">(Coming Soon)</span>
                 </a>
               </span>
 
@@ -440,23 +438,16 @@
 
 
 <!-- ================================================================
-     VIDEO — Coming Soon
-     Replace this section with an actual YouTube embed when available.
-     Use the .publication-video class to get a responsive 16:9 iframe.
-     Example:
-       <div class="publication-video">
-         <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0&showinfo=0"
-                 frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-       </div>
+     VIDEO — Commented out (replaced by the Poster section below).
+     Kept here for easy restoration once a demo/explainer video is ready.
      ================================================================ -->
+<!--
 <section class="section" id="video">
   <div class="container is-max-fullhd">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Video</h2>
 
-        <!-- Video coming-soon placeholder.
-             To replace: remove this div and add the YouTube iframe above. -->
         <div class="coming-soon-notice" style="padding: 4rem 2rem;">
           <p class="coming-soon-icon"><i class="fab fa-youtube fa-3x" style="color: #e0e0e0;"></i></p>
           <p class="title is-5" style="color: #888; margin-top: 1rem;">Video Coming Soon</p>
@@ -464,6 +455,47 @@
             A demo and explainer video will be posted here upon paper publication.
           </p>
         </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+<!-- ================================================================
+     OVERVIEW — ICRA 2026 poster
+     Inline <object>/<iframe> PDF embeds are unreliable across browsers
+     (and blocked entirely under file://), so we display a rendered PNG
+     of the poster and link out to the full-resolution PDF.
+       PNG (web-optimized, 2808x1986): static/images/poster/ICRA_Poster_SurgSync.png
+       PDF (full A0, vector):          static/videos/ICRA_Poster_SurgSync.pdf
+     ================================================================ -->
+<section class="section" id="poster">
+  <div class="container is-max-fullhd">
+    <div class="columns is-centered has-text-centered">
+      <!-- Full-width column so the poster spans the same width as the teaser figure above -->
+      <div class="column is-full">
+        <h2 class="title is-3">Overview</h2>
+        <p class="subtitle is-5" style="color: #888;">ICRA 2026</p>
+
+        <!-- Poster image (non-clickable); use the button below to open the full PDF. -->
+        <div class="poster-embed" style="margin-top: 1.5rem;">
+          <figure class="image">
+            <img src="./static/images/poster/ICRA_Poster_SurgSync.png"
+                 loading="lazy"
+                 alt="SurgSync ICRA 2026 overview poster"
+                 style="border: 1px solid #e0e0e0; border-radius: 6px;">
+          </figure>
+        </div>
+
+        <!-- Direct link to open / download the full-resolution poster -->
+        <p class="content" style="margin-top: 1rem;">
+          <a class="button is-link is-light" href="./static/videos/ICRA_Poster_SurgSync.pdf" target="_blank" rel="noopener">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Open full poster (PDF)</span>
+          </a>
+        </p>
 
       </div>
     </div>
@@ -502,8 +534,7 @@
           </ul>
           <p>
             All modalities are frame-aligned by our synchronized recorders, enabling direct
-            multi-modal model training without additional interpolation. <strong> (the recording
-            frequency can be found in the Results section) </strong>
+            multi-modal model training without additional interpolation.
           </p>
         </div>
       </div>
@@ -607,6 +638,26 @@
 
     </div>
     <!-- /columns -->
+
+    <!-- Emphasis note: record frequency is a deliberate design trade-off.
+         Placed below the two-column row so it spans the full container width.
+         We cap recording at ~10 Hz (offline) / the online-matching recorder's
+         effective rate (~4 Hz) because pushing the frequency higher leaves less
+         time per cycle for cross-modal time-matching, degrading alignment. The
+         chosen rate is the sweet spot that keeps latency low while still
+         capturing enough samples for downstream learning. -->
+    <div class="notification is-light" style="border-left: 4px solid hsl(204,86%,53%); margin-top: 1.5rem;">
+      <p>
+        <strong>Note on recording frequency.</strong> The dataset is recorded at
+        <strong>10&nbsp;Hz</strong> (offline-matching recorder), or the effective rate of the
+        <strong>online-matching recorder</strong> (4.04&nbsp;±&nbsp;1.69&nbsp;Hz). This is a
+        deliberate <strong>trade-off between time alignment and record frequency</strong>:
+        pushing the frequency higher leaves less time per cycle to cross-match modalities,
+        which degrades temporal alignment, whereas a lower frequency yields tighter alignment
+        but fewer samples. Our operating point balances both — keeping sub-millisecond-to-few-millisecond
+        latency while sustaining a usable sampling rate for multi-modal learning.
+      </p>
+    </div>
   </div>
 </section>
 
