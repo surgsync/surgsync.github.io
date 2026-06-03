@@ -3,13 +3,15 @@ title: "SurgSync"
 description: "Time-Synchronized Multi-modal Data Collection Framework and Dataset for Surgical Robotics"
 url: "https://surgsync.github.io"
 
-# Tell Jekyll not to process these directories as Jekyll content —
-# they are plain static files that should be served as-is.
+# Files/directories Jekyll should NOT copy into the built _site output.
+# NOTE: anything listed here is omitted from the build entirely (not just
+# "skipped from Jekyll processing"). Plain static assets like PDFs are copied
+# as-is by default, so they must NOT be excluded — doing so caused the poster
+# PDF to 404. Only list build/source files that should never be published.
 exclude:
   - Gemfile
   - Gemfile.lock
   - CLAUDE.md
   - HOW_TO_EDIT.md
   - HOW_TO_RUN.md
-  - "*.pdf"
   - ".idea"
